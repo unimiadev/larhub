@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { FaArrowDown } from "react-icons/fa";
+import Image from "next/image";
 
 const TituloLandLarHub = () => {
   return (
@@ -46,10 +47,12 @@ const TituloLandLarHub = () => {
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.4 }}
           >
-            <img
+            <Image
               src="/assets/hero.jpg"
               alt="Casa"
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              priority
             />
 
             {/* Gradient Overlays */}

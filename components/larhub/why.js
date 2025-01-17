@@ -2,8 +2,7 @@
 
 import React from "react";
 import { motion } from "framer-motion";
-import { Link } from "@mui/material";
-import { FaArrowRight, FaCheck } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
 
 const PorqueLandLarHub = () => {
   const benefits = [
@@ -84,22 +83,6 @@ const PorqueLandLarHub = () => {
                   </motion.div>
                 ))}
               </div>
-
-              {/* CTA Button */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.6 }}
-                className="inline-block"
-              >
-                <Link
-                  href="/"
-                  className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary-100 to-secondary-100 px-8 py-3 text-white font-semibold no-underline transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
-                >
-                  Saber Mais
-                  <FaArrowRight className="transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-              </motion.div>
             </motion.div>
 
             {/* Right Content - Image */}

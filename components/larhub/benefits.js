@@ -3,7 +3,6 @@
 import React from "react";
 import { FaCheckSquare } from "react-icons/fa";
 import { motion } from "framer-motion";
-import { Link } from "@mui/material";
 
 const BeneficioLandLarHub = () => {
   return (
@@ -143,21 +142,6 @@ const BeneficioLandLarHub = () => {
                 eficiente. Acompanhe suas vendas em tempo real e tome decisões
                 informadas para um negócio mais lucrativo.
               </p>
-            </motion.div>
-
-            {/* BUTTON */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mt-8"
-            >
-              <Link
-                href="/"
-                className="inline-block rounded-xl bg-secondary-100 px-10 py-3 hover:bg-primary-100 hover:text-white text-base font-semibold no-underline transition-all duration-300 shadow-md hover:shadow-lg"
-              >
-                Saber Mais
-              </Link>
             </motion.div>
           </div>
 

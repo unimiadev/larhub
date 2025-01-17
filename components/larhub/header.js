@@ -6,6 +6,7 @@ import { FaBars, FaTimes, FaUserCircle } from "react-icons/fa";
 import Link from "next/link";
 import { auth } from "@/firebase";
 import PreLaunchModal from "../auth/PreLaunchModal";
+import Image from "next/image";
 
 const HeaderLandLarHub = () => {
   const [isMenuToggled, setIsMenuToggled] = useState(false);
@@ -51,13 +52,16 @@ const HeaderLandLarHub = () => {
       <nav className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4 py-6">
         <div className="flex items-center justify-between gap-8">
           {/* Logo */}
-          <motion.img
-            src="https://firebasestorage.googleapis.com/v0/b/imob-projeto-expmed.appspot.com/o/logo_larhub_semfundo.png?alt=media&token=e539ef33-1e3b-4adb-948d-287dadaaaf58"
-            alt="Logo LarHub"
-            className="h-10"
-            whileHover={{ scale: 1.05 }}
-            transition={{ duration: 0.2 }}
-          />
+          <motion.div className="h-10 relative">
+            <Image
+              src="https://firebasestorage.googleapis.com/v0/b/imob-projeto-expmed.appspot.com/o/logo_larhub_semfundo.png?alt=media&token=e539ef33-1e3b-4adb-948d-287dadaaaf58"
+              alt="Logo LarHub"
+              width={120}
+              height={40}
+              className="object-contain"
+              priority
+            />
+          </motion.div>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8">
@@ -158,9 +162,11 @@ const HeaderLandLarHub = () => {
                 ))}
                 <Link
                   href="#"
-                  onClick={handleLoginClick}
                   className="mt-4 flex items-center gap-2 bg-secondary-100 text-white px-6 py-3 rounded-xl hover:bg-primary-100 transition-all duration-300"
-                  onClick={() => setIsMenuToggled(false)}
+                  onClick={() => {
+                    handleLoginClick();
+                    setIsMenuToggled(false);
+                  }}
                 >
                   <FaUserCircle />
                   <span>Login</span>
