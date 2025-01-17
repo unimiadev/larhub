@@ -1,0 +1,69 @@
+/* HeaderCorretor.module.css */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 20px;
+    background-color: #f0f0f0;
+    border-bottom: 1px solid #ccc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.leftContainer {
+    align-items: center;
+    display: flex;
+    /* Para alinhar o ícone */
+}
+
+.icon {
+    max-width: 60px;
+    height: auto;
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.rightContainer {
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    padding: 8px 16px;
+    background-color: var(--primary-blue-color, #336699);
+    /* Usando a cor da variável */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    /* Transição para hover */
+}
+
+.button:hover {
+    background-color: #0056b3;
+    /* Cor mais escura no hover */
+}
+
+.link {
+    color: #336699;
+    /* Cor para links */
+    text-decoration: none;
+    /* Remove sublinhado */
+}
+
+.link:hover {
+    color: #0056b3;
+    /* Cor mais escura no hover */
+}
+
+
+.p {
+    color: #333;
+    /* Cor para textos */
+}
