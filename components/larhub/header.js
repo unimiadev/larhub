@@ -30,7 +30,7 @@ const HeaderLandLarHub = () => {
   }, []);
 
   const menuItems = [
-    { label: "Home", href: "#home" },
+    { label: "Início", href: "#home" },
     { label: "Soluções", href: "#solution" },
     { label: "Benefícios", href: "#benefits" },
     { label: "FAQ", href: "#faq" },
