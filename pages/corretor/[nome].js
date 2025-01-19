@@ -4,11 +4,11 @@ import { db } from "../../firebase";
 import HeaderCorretor from "@/components/header_corretor";
 import BannerPrincipal from "@/components/banner_corretor";
 import FavoritosCorretor from "@/components/favoritos_corretor";
-import FilterBar from "@/components/filter_bar"; // Importar FilterBar
+import FilterBar from "@/components/filter_bar";
 import FooterLandCorretor from "@/components/footer_corretor";
-import ContactCard from "@/components/corretorDescSection";
 import CorretorDescSection from "@/components/corretorDescSection";
 import MetaTagsCorretor from "@/components/corretor/MetaTagsCorretor";
+import { motion } from "framer-motion";
 import "../../app/globals.css";
 
 const Corretor = ({ corretor, imoveis, logo, landingTitle }) => {
@@ -62,38 +62,53 @@ const Corretor = ({ corretor, imoveis, logo, landingTitle }) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-white">
       <MetaTagsCorretor corretor={corretor} logo={logo} />
 
-      <HeaderCorretor logoUrl={logo} nomeCorretor={corretor.name} />
+      <HeaderCorretor
+        logoUrl={logo}
+        nomeCorretor={corretor.name}
+        contato={corretor.contato}
+      />
 
-      {landingTitle && (
-        <div className="text-center">
-          <BannerPrincipal titulo={landingTitle} />
-          <FilterBar
-            onFilterChange={handleFilterChange}
-            onResetFilters={handleResetFilters}
+      {landingTitle && <BannerPrincipal titulo={landingTitle} />}
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.6 }}
+        className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4 py-16"
+      >
+        <FavoritosCorretor
+          nomeCorretor={corretor.name}
+          imoveis={filteredImoveis}
+          isMostrarMais={true}
+        />
+      </motion.div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white py-16"
+      >
+        <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+          <CorretorDescSection
+            description="Estou dedicado a ajudar você a encontrar a casa dos seus sonhos. Seja na compra, venda ou investimento, ofereço um serviço personalizado e orientação especializada em cada etapa do processo. Vamos transformar seus sonhos em realidade!"
+            name={corretor.name}
+            imageUrl={logo}
+            contato={corretor.contato}
+            redesSociais={corretor.contato.redes_sociais}
           />
         </div>
-      )}
-
-      <FavoritosCorretor
-        nomeCorretor={corretor.name}
-        imoveis={filteredImoveis}
-        isMostrarMais={true}
-      />
-
-      <CorretorDescSection
-        description="Estou dedicado a ajudar você a encontrar a casa dos seus sonhos. Seja na compra, venda ou investimento, ofereço um serviço personalizado e orientação especializada em cada etapa do processo. Vamos transformar seus sonhos em realidade!"
-        name={corretor.name}
-        imageUrl={logo}
-        socialLinks={[]}
-      />
+      </motion.div>
 
       <FooterLandCorretor
         logoUrl={logo}
         nomeCorretor={corretor.name}
-        className="mt-10"
+        contato={corretor.contato}
+        redesSociais={corretor.contato.redes_sociais}
+        className="bg-white"
       />
     </div>
   );

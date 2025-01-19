@@ -1,70 +1,173 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Link } from "@mui/material";
+import Link from "next/link";
+import Image from "next/image";
+import { FaWhatsapp, FaInstagram, FaFacebook, FaLinkedin, FaEnvelope } from "react-icons/fa";
 
-const CorretorDescSection = ({ description, name, imageUrl }) => {
+const CorretorDescSection = ({ description, name, imageUrl, contato, redesSociais }) => {
+  console.log('CorretorDescSection Full Props:', { 
+    contato, 
+    redesSociais,
+    nestedRedesSociais: contato?.redes_sociais,
+    hasInstagram: redesSociais?.instagram || contato?.redes_sociais?.instagram,
+    hasFacebook: redesSociais?.facebook || contato?.redes_sociais?.facebook,
+    hasLinkedin: redesSociais?.linkedin || contato?.redes_sociais?.linkedin
+  });
+
   const socialLinks = [
-    {
-      url: "https://www.facebook.com",
-      icon: "https://firebasestorage.googleapis.com/v0/b/imob-projeto-expmed.appspot.com/o/face.png?alt=media&token=f1c6db80-ed32-48a8-b857-5f57f1dc3389",
+    contato?.celular && {
+      icon: <FaWhatsapp size={24} />,
+      url: `https://wa.me/55${contato?.celular?.replace(/\D/g, '')}?text=Olá ${name}, gostaria de mais informações sobre os imóveis.`,
+      label: "WhatsApp",
     },
-    {
-      url: "https://www.instagram.com",
-      icon: "https://firebasestorage.googleapis.com/v0/b/imob-projeto-expmed.appspot.com/o/insta.png?alt=media&token=733cc631-dce4-42cd-9a00-65e120bf7dce",
+    redesSociais?.instagram && {
+      icon: <FaInstagram size={24} />,
+      url: redesSociais.instagram,
+      label: "Instagram",
     },
-    {
-      url: "https://www.linkedin.com",
-      icon: "https://firebasestorage.googleapis.com/v0/b/imob-projeto-expmed.appspot.com/o/linkedin.png?alt=media&token=5497b8d3-52b8-425b-89f8-41888f3d2085",
+    redesSociais?.facebook && {
+      icon: <FaFacebook size={24} />,
+      url: redesSociais.facebook,
+      label: "Facebook",
     },
-  ];
+    redesSociais?.linkedin && {
+      icon: <FaLinkedin size={24} />,
+      url: redesSociais.linkedin,
+      label: "LinkedIn",
+    },
+    contato?.email && {
+      icon: <FaEnvelope size={24} />,
+      url: `mailto:${contato.email}`,
+      label: "Email",
+    },
+  ].filter(Boolean);
+
+  console.log('Filtered Social Links:', socialLinks);
 
   return (
-    <section
-      id="contact"
-      className="bg-cover bg-center bg-gray-80 gap-16 md:h-full"
-      style={{
-        backgroundImage:
-          "url('https://img.freepik.com/fotos-premium/o-processo-de-design-dos-arquitetos_1320745-5544.jpg?w=740')",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      <motion.div className="mx-auto w-5/6 py-24 flex flex-col items-center justify-center">
-        {/* TITLE */}
-        <div className="text-center">
-          <img
-            src={imageUrl}
-            alt="LarHub"
-            className="w-[170px] mr-2 rounded-lg filter brightness-0 invert"
-          />
-          <h2 className="text-white text-3xl font-bold">{name}</h2>
-          <p className="my-5 text-lg text-white">{description}</p>
-        </div>
+    <section id="sobre" className="bg-white pt-16 md:pt-24 overflow-hidden">
+      <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4 relative">
+        {/* Decorative Elements */}
+        <motion.div
+          className="absolute -right-40 top-0 w-80 h-80 bg-primary-100/5 rounded-full"
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8 }}
+        />
+        <motion.div
+          className="absolute -left-40 bottom-0 w-96 h-96 bg-secondary-100/5 rounded-full"
+          initial={{ opacity: 0, scale: 0 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        />
 
-        {/* ACTION */}
-        <Link
-          href="/"
-          className="rounded-md bg-secondary-100 px-10 py-2 hover:bg-primary-100 hover:text-white text-base font-normal no-underline transition-all duration-300 text-white"
-        >
-          Entre em Contato
-        </Link>
-
-        <div className="flex items-center gap-4 my-5">
-          {socialLinks.map((link, index) => (
-            <a
-              key={index}
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
+        {/* Content */}
+        <div className="relative z-10">
+          <motion.div
+            className="text-center mb-20"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.5 }}
+            transition={{ duration: 0.5 }}
+            variants={{
+              hidden: { opacity: 0, y: 50 },
+              visible: { opacity: 1, y: 0 },
+            }}
+          >
+            <motion.span
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 0.1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute -top-10 left-1/2 -translate-x-1/2 text-7xl font-black text-primary-100"
             >
-              <img
-                src={link.icon}
-                alt="social-icon"
-                className="w-6 h-6 filter brightness-0 invert"
-              />
-            </a>
-          ))}
+              SOBRE
+            </motion.span>
+            <h2 className="text-4xl font-extrabold text-black relative z-10">
+              Conheça seu{" "}
+              <span className="text-secondary-100 relative inline-block">
+                corretor
+                <motion.div
+                  className="absolute -bottom-2 left-0 h-1 bg-secondary-100"
+                  initial={{ width: "0%" }}
+                  whileInView={{ width: "100%" }}
+                  transition={{ delay: 0.5, duration: 0.5 }}
+                />
+              </span>
+            </h2>
+          </motion.div>
+
+          <div className="flex flex-col md:flex-row items-center gap-12 md:gap-24">
+            {/* Image */}
+            <motion.div
+              className="w-full md:w-1/2"
+              initial={{ opacity: 0, x: -50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="relative aspect-square rounded-2xl overflow-hidden shadow-xl">
+                <Image
+                  src={imageUrl || "/assets/corretor-contato-default.jpg"}
+                  alt={name}
+                  fill
+                  className="object-cover"
+                  onError={(e) => {
+                    e.target.src = "/assets/corretor-contato-default.jpg";
+                  }}
+                />
+              </div>
+            </motion.div>
+
+            {/* Content */}
+            <motion.div
+              className="w-full md:w-1/2 space-y-8"
+              initial={{ opacity: 0, x: 50 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <h3 className="text-3xl font-bold text-gray-900">{name}</h3>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                {description}
+              </p>
+
+              {/* Social Links - Only show if there are any */}
+              {socialLinks && socialLinks.length > 0 && (
+                <div className="flex items-center gap-6">
+                  {socialLinks.map((link) => (
+                    <motion.a
+                      key={link.label}
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-gray-600 hover:text-primary-100 transition-colors duration-300"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {link.icon}
+                    </motion.a>
+                  ))}
+                </div>
+              )}
+
+              {/* Contact Button - Only show if WhatsApp number exists */}
+              {contato?.celular && (
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <Link
+                    href={`https://wa.me/55${contato.celular.replace(/\D/g, '')}?text=Olá ${name}, gostaria de mais informações sobre os imóveis.`}
+                    target="_blank"
+                    className="inline-flex items-center gap-2 bg-secondary-100 text-white px-8 py-3 rounded-xl font-semibold hover:bg-primary-100 transition-colors duration-300"
+                  >
+                    <FaWhatsapp size={20} />
+                    Falar com {name.split(" ")[0]}
+                  </Link>
+                </motion.div>
+              )}
+            </motion.div>
+          </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 };

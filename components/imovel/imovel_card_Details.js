@@ -1,65 +1,59 @@
-import React, { useEffect } from "react";
-import { FaBed, FaCar, FaExpand, FaVectorSquare } from "react-icons/fa";
-
-const Card = ({ icon, value, description }) => {
-  return (
-    <div className="flex items-center gap-2">
-      <div className="bg-secondary-100/20 flex justify-center items-center w-10 h-10 rounded-full">
-        {icon}
-      </div>
-      <div className="text-gray-600 text-lg font-medium">{value}</div>
-      <div className="text-gray-600 text-lg font-medium">{description}</div>
-    </div>
-  );
-};
+import { motion } from "framer-motion";
+import { FaBed, FaBath, FaCar, FaRuler } from "react-icons/fa";
 
 const ImovelCardDetails = ({ imovel }) => {
-  useEffect(() => {
-    const addHoverEffect = () => {
-      const cards = document.querySelectorAll(".card");
-      cards.forEach((card) => {
-        card.addEventListener("mouseenter", () => {
-          Object.assign(card.style, cardHoverStyle);
-        });
-        card.addEventListener("mouseleave", () => {
-          Object.assign(card.style, cardStyle);
-        });
-      });
-    };
-
-    addHoverEffect();
-
-    return () => {
-      const cards = document.querySelectorAll(".card");
-      cards.forEach((card) => {
-        card.removeEventListener("mouseenter", () => {});
-        card.removeEventListener("mouseleave", () => {});
-      });
-    };
-  }, []);
+  const details = [
+    {
+      icon: <FaBed className="text-2xl text-secondary-100" />,
+      label: "Quartos",
+      value: imovel.detalhes.total_dormitorios || "N/A",
+    },
+    {
+      icon: <FaBath className="text-2xl text-secondary-100" />,
+      label: "Banheiros",
+      value: imovel.detalhes.total_suites || "N/A",
+    },
+    {
+      icon: <FaCar className="text-2xl text-secondary-100" />,
+      label: "Vagas",
+      value: imovel.detalhes.vagas_garagem || "N/A",
+    },
+    {
+      icon: <FaRuler className="text-2xl text-secondary-100" />,
+      label: "Área",
+      value: imovel.detalhes.area_total
+        ? `${imovel.detalhes.area_total}m²`
+        : "N/A",
+    },
+  ];
 
   return (
-    <div className="flex flex-wrap items-center gap-8 my-8 w-5/6 mx-auto">
-      <Card
-        icon={<FaExpand size={22} style={{ color: "#F2CD00" }} />}
-        value={`${imovel.detalhes["area_total"]} m²`}
-        description="Área total"
-      />
-      <Card
-        icon={<FaVectorSquare size={22} style={{ color: "#F2CD00" }} />}
-        value={`${imovel.detalhes["area_privativa"]} m²`}
-        description="Área privativa"
-      />
-      <Card
-        icon={<FaBed size={22} style={{ color: "#F2CD00" }} />}
-        value={`${imovel.detalhes["total_dormitorios"]} | ${imovel.detalhes["total_suites"]}`}
-        description="Dormitórios | Suítes"
-      />
-      <Card
-        icon={<FaCar size={22} style={{ color: "#F2CD00" }} />}
-        value={imovel.detalhes["vagas_garagem"]}
-        description="Vagas Garagem"
-      />
+    <div className="bg-white rounded-2xl border border-gray-100 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)] p-8">
+      <div className="flex items-center gap-4 mb-6">
+        <div className="p-3 bg-secondary-100/10 rounded-xl">
+          <FaRuler className="text-2xl text-secondary-100" />
+        </div>
+        <h2 className="text-2xl font-bold text-gray-800">Detalhes do Imóvel</h2>
+      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+        {details.map((detail, index) => (
+          <motion.div
+            key={detail.label}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: index * 0.1 }}
+            className="flex flex-col items-center text-center space-y-2"
+          >
+            <div className="p-4 bg-secondary-100/5 rounded-full">
+              {detail.icon}
+            </div>
+            <span className="text-sm text-gray-500">{detail.label}</span>
+            <span className="text-lg font-semibold text-gray-800">
+              {detail.value}
+            </span>
+          </motion.div>
+        ))}
+      </div>
     </div>
   );
 };

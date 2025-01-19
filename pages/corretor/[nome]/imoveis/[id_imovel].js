@@ -15,6 +15,7 @@ import SimilarImoveisComponent from "@/components/imovel/similarImoveisComponent
 import MetaTagsImovel from "@/components/imovel/meta_tags_imovel";
 import "../../../../app/globals.css";
 import CorretorDescSection from "@/components/corretorDescSection";
+import { motion } from "framer-motion";
 
 const ImovelInfoPage = ({
   nomeCorretor,
@@ -36,90 +37,134 @@ const ImovelInfoPage = ({
             ? `${imovelSelecionado.detalhes["nome_imovel"]} - ${corretor.name}`
             : "Imóvel"}
         </title>
-        {imovelSelecionado && (
-          <>
-            <meta
-              property="og:title"
-              content={`${imovelSelecionado.detalhes["nome_imovel"]} - ${corretor.name}`}
-            />
-            <meta property="og:type" content="website" />
-            <meta
-              property="og:description"
-              content={`Confira o imóvel ${imovelSelecionado.detalhes["nome_imovel"]} com o corretor ${corretor.name}`}
-            />
-            <meta
-              property="og:url"
-              content={`https://seusite.com/corretor/${corretor.name}/imoveis/${idImovel}`}
-            />
-            {imovelSelecionado.imagens &&
-              imovelSelecionado.imagens.length > 0 && (
-                <>
-                  <meta
-                    property="og:image"
-                    content={imovelSelecionado.imagens[0]}
-                  />
-                  <meta property="og:image:width" content="300" />
-                  <meta property="og:image:height" content="200" />
-                </>
-              )}
-            <meta name="twitter:card" content="summary_large_image" />
-            <meta
-              name="twitter:title"
-              content={`${imovelSelecionado.detalhes["nome_imovel"]} - ${corretor.name}`}
-            />
-            <meta
-              name="twitter:image"
-              content={
-                imovelSelecionado.imagens &&
-                imovelSelecionado.imagens.length > 0
-                  ? imovelSelecionado.imagens[0]
-                  : corretor.landing.appBar.logo
-              }
-            />
-            <meta name="twitter:image:width" content="300" />
-            <meta name="twitter:image:height" content="200" />
-            <meta
-              name="twitter:description"
-              content={`Confira o imóvel ${imovelSelecionado.detalhes["nome_imovel"]} com o corretor ${corretor.name}`}
-            />
-          </>
-        )}
+        <MetaTagsImovel imovel={imovelSelecionado} corretor={corretor} />
       </Head>
 
       <HeaderCorretor
         logoUrl={corretor.landing.appBar.logo}
         nomeCorretor={nomeCorretor}
+        contato={corretor.contato}
       />
 
-      {imovelSelecionado.imagens && (
-        <ImovelImageGallery imagens={imovelSelecionado.imagens} />
-      )}
+      {/* Main Content */}
+      <main className="pt-20">
+        {/* Gallery Section */}
+        {imovelSelecionado.imagens && (
+          <section className="w-full bg-white">
+            <div className="mx-auto w-full xl:w-[85%] 2xl:w-3/4">
+              <ImovelImageGallery imagens={imovelSelecionado.imagens} />
+            </div>
+          </section>
+        )}
 
-      <PrecoImovel imovelSelecionado={imovelSelecionado} />
-      <ImovelHeader imovelSelecionado={imovelSelecionado} idImovel={idImovel} />
-      <ImovelCardDetails imovel={imovelSelecionado} />
-      <ImovelDescricao imovelSelecionado={imovelSelecionado} />
-      <CaracteristicasLista imovelSelecionado={imovelSelecionado} />
+        {/* Price and Basic Info Section */}
+        <section className="bg-white shadow-sm">
+          <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4 py-8">
+            <PrecoImovel imovelSelecionado={imovelSelecionado} />
+            <ImovelHeader
+              imovelSelecionado={imovelSelecionado}
+              idImovel={idImovel}
+            />
+          </div>
+        </section>
 
-      {imovelSelecionado.localizacao && (
-        <ImovelMap location={imovelSelecionado.localizacao} />
-      )}
+        {/* Details Grid Section */}
+        <section className="bg-white py-16">
+          <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <ImovelCardDetails imovel={imovelSelecionado} />
+            </motion.div>
+          </div>
+        </section>
 
-      <SimilarImoveisComponent
-        imoveisSemelhantes={imoveisSemelhantes}
-        nomeCorretor={nomeCorretor}
-      />
+        {/* Description Section */}
+        <section className="bg-white py-16">
+          <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <ImovelDescricao imovelSelecionado={imovelSelecionado} />
+            </motion.div>
+          </div>
+        </section>
 
-      <CorretorDescSection
-        description="Estou dedicado a ajudar você a encontrar a casa dos seus sonhos. Seja na compra, venda ou investimento, ofereço um serviço personalizado e orientação especializada em cada etapa do processo. Vamos transformar seus sonhos em realidade!"
-        name={corretor.name}
-        imageUrl={logo}
-        socialLinks={[]}
-      />
+        {/* Features Section */}
+        <section className="bg-white py-16">
+          <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <CaracteristicasLista imovelSelecionado={imovelSelecionado} />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Map Section */}
+        {imovelSelecionado.localizacao && (
+          <section className="bg-white py-16">
+            <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className=" overflow-hidden shadow-lg">
+                  <ImovelMap location={imovelSelecionado.localizacao} />
+                </div>
+              </motion.div>
+            </div>
+          </section>
+        )}
+
+        {/* Similar Properties Section */}
+        <section className="bg-white py-16">
+          <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <SimilarImoveisComponent
+                imoveisSemelhantes={imoveisSemelhantes}
+                nomeCorretor={nomeCorretor}
+              />
+            </motion.div>
+          </div>
+        </section>
+
+        {/* Agent Info Section */}
+        <section className="bg-white py-16">
+          <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <CorretorDescSection
+                description="Estou dedicado a ajudar você a encontrar a casa dos seus sonhos. Seja na compra, venda ou investimento, ofereço um serviço personalizado e orientação especializada em cada etapa do processo. Vamos transformar seus sonhos em realidade!"
+                name={corretor.name}
+                imageUrl={logo}
+                contato={corretor.contato}
+                redesSociais={corretor.contato?.redes_sociais}
+              />
+            </motion.div>
+          </div>
+        </section>
+      </main>
 
       <FooterLandCorretor
         logoUrl={corretor.landing.appBar.logo}
         nomeCorretor={corretor.name}
+        contato={corretor.contato}
+        redesSociais={corretor.contato?.redes_sociais}
       />
     </div>
   );

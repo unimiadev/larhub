@@ -1,98 +1,160 @@
-import React, { useState } from "react";
-import { useRouter } from "next/router";
-import { Link } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { FaBars, FaTimes, FaWhatsapp } from "react-icons/fa";
 
-export function HeaderCorretor({ logoUrl, nomeCorretor, className }) {
-  const router = useRouter();
-  const [menuOpen, setMenuOpen] = useState(false);
+const HeaderCorretor = ({ logoUrl, nomeCorretor, contato }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [imgError, setImgError] = useState(false);
 
-  const formatNomeCorretor = (nome) => {
-    if (typeof nome !== "string") {
-      return "";
-    }
-    return nome.toLowerCase().replace(/\s+/g, "-");
-  };
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 0);
+    };
 
-  const handleLogoClick = () => {
-    const formattedNomeCorretor = formatNomeCorretor(nomeCorretor);
-    router.push(`/corretor/${formattedNomeCorretor}`);
-  };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
-  const toggleMenu = () => {
-    setMenuOpen(!menuOpen);
-  };
+  const whatsappLink = contato?.celular
+    ? `https://wa.me/55${contato.celular.replace(
+        /\D/g,
+        ""
+      )}?text=Olá ${nomeCorretor}, gostaria de mais informações sobre os imóveis.`
+    : null;
 
-  const links = [
-    {
-      href: `/corretor/${formatNomeCorretor(nomeCorretor)}/imoveis?filter=todos/`,
-      label: "Imóveis",
-    },
-    {
-      href: `/corretor/${formatNomeCorretor(nomeCorretor)}/imoveis?filter=alugar`,
-      label: "Alugar",
-    },
-    {
-      href: `/corretor/${formatNomeCorretor(nomeCorretor)}/imoveis?filter=comprar`,
-      label: "Comprar",
-    },
-  ];
+  // Use default logo if no logo provided or on error
+  const finalLogoUrl =
+    imgError || !logoUrl ? "/assets/logo_larhub_semfundo.png" : logoUrl;
 
   return (
-    <header className="fixed top-0 z-30 w-full bg-gray-20 flex justify-between items-center gap-4 py-4 px-12">
-      <img
-        src={logoUrl}
-        alt="LarHub"
-        onClick={handleLogoClick}
-        className="h-8 cursor-pointer"
-      />
-
-      {/* Toggle Button for Mobile */}
-      <div className="sm:hidden" onClick={toggleMenu}>
-        {menuOpen ? <CloseIcon className="text-black" /> : <MenuIcon className="text-black" />}
-      </div>
-
-      {/* Desktop Menu */}
-      <div className="hidden sm:flex space-x-8 justify-center">
-        {links.map((link) => (
-          <a key={link.href} href={link.href} className="hover:text-secondary-100">
-            {link.label}
-          </a>
-        ))}
-      </div>
-
-      <Link
-        href="#contact"
-        className="hidden sm:block rounded-md bg-primary-100 px-10 py-2 hover:bg-secondary-100 text-white text-base font-normal no-underline transition-all duration-300"
-      >
-        Contato
-      </Link>
-
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-white flex flex-col items-center justify-center space-y-8 sm:hidden z-40">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-2xl hover:text-secondary-100"
-              onClick={toggleMenu}
-            >
-              {link.label}
-            </a>
-          ))}
-          <Link
-            href="#contact"
-            className="rounded-md bg-primary-100 px-10 py-2 hover:bg-secondary-100 text-white text-xl font-normal no-underline transition-all duration-300"
-            onClick={toggleMenu}
-          >
-            Contato
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+        scrolled ? "bg-white shadow-lg" : "bg-transparent"
+      }`}
+    >
+      <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
+        <nav className="flex items-center justify-between py-4">
+          {/* Logo with fallback */}
+          <Link href="/" className="relative z-10">
+            <Image
+              src={finalLogoUrl}
+              alt="Logo"
+              width={120}
+              height={40}
+              className={`h-10 w-auto transition-opacity duration-300 ${
+                scrolled ? "opacity-100" : "opacity-90 hover:opacity-100"
+              }`}
+              priority
+              unoptimized
+              onError={() => {
+                console.log("Logo load error, using default logo");
+                setImgError(true);
+              }}
+            />
           </Link>
-        </div>
-      )}
-    </header>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-8">
+            <Link
+              href="#imoveis"
+              className={`text-base font-medium transition-colors duration-300 ${
+                scrolled
+                  ? "text-gray-700 hover:text-primary-100"
+                  : "text-white hover:text-secondary-100"
+              }`}
+              scroll={true}
+            >
+              Imóveis
+            </Link>
+            <Link
+              href="#sobre"
+              className={`text-base font-medium transition-colors duration-300 ${
+                scrolled
+                  ? "text-gray-700 hover:text-primary-100"
+                  : "text-white hover:text-secondary-100"
+              }`}
+            >
+              Sobre
+            </Link>
+            {whatsappLink && (
+              <Link
+                href={whatsappLink}
+                target="_blank"
+                className="flex items-center gap-2 rounded-xl bg-secondary-100 px-6 py-2.5 text-white font-semibold transition-all duration-300 hover:bg-primary-100 hover:shadow-lg"
+              >
+                <FaWhatsapp />
+                Contato
+              </Link>
+            )}
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="md:hidden relative z-10"
+          >
+            {isOpen ? (
+              <FaTimes
+                className={scrolled ? "text-gray-800" : "text-white"}
+                size={24}
+              />
+            ) : (
+              <FaBars
+                className={scrolled ? "text-gray-800" : "text-white"}
+                size={24}
+              />
+            )}
+          </button>
+        </nav>
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="absolute top-full left-0 right-0 bg-white shadow-lg md:hidden"
+            >
+              <div className="flex flex-col p-6 space-y-4">
+                <Link
+                  href="#imoveis"
+                  className="text-gray-700 hover:text-primary-100 font-medium"
+                  onClick={() => setIsOpen(false)}
+                  scroll={true}
+                >
+                  Imóveis
+                </Link>
+                <Link
+                  href="#sobre"
+                  className="text-gray-700 hover:text-primary-100 font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Sobre
+                </Link>
+                {whatsappLink && (
+                  <Link
+                    href={whatsappLink}
+                    target="_blank"
+                    className="flex items-center justify-center gap-2 rounded-xl bg-secondary-100 px-6 py-2.5 text-white font-semibold transition-all duration-300 hover:bg-primary-100"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <FaWhatsapp />
+                    Contato
+                  </Link>
+                )}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.header>
   );
-}
+};
 
 export default HeaderCorretor;

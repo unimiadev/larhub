@@ -1,12 +1,13 @@
-import { Inter } from 'next/font/google'
-import './globals.css'
+import { Inter } from "next/font/google";
+import "./globals.css";
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
-  title: 'LarHub - Sua Plataforma de Gerenciamento Imobiliário',
-  description: 'Gerencie seus imóveis de forma eficiente e fácil com LarHub. Encontre tudo que você precisa em um só lugar.',
-}
+  title: "LarHub - Sua Plataforma de Gerenciamento Imobiliário",
+  description:
+    "Gerencie seus imóveis de forma eficiente e fácil com LarHub. Encontre tudo que você precisa em um só lugar.",
+};
 
 export default function RootLayout({ children }) {
   return (
@@ -14,7 +15,7 @@ export default function RootLayout({ children }) {
       <head>
         <title>{metadata.title}</title>
         <meta name="description" content={metadata.description} />
-        
+
         <meta property="og:title" content={metadata.title} />
         <meta property="og:description" content={metadata.description} />
         <meta property="og:image" content="/assets/hero.jpg" />
@@ -25,5 +26,5 @@ export default function RootLayout({ children }) {
       </head>
       <body className={inter.className}>{children}</body>
     </html>
-  )
+  );
 }
