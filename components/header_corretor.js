@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { FaBars, FaTimes, FaWhatsapp } from "react-icons/fa";
+import {
+  FaBars,
+  FaTimes,
+  FaWhatsapp,
+  FaHome,
+  FaBuilding,
+} from "react-icons/fa";
 
 const HeaderCorretor = ({ logoUrl, nomeCorretor, contato }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -25,6 +31,10 @@ const HeaderCorretor = ({ logoUrl, nomeCorretor, contato }) => {
       )}?text=Olá ${nomeCorretor}, gostaria de mais informações sobre os imóveis.`
     : null;
 
+  const formattedName = nomeCorretor?.toLowerCase().replace(/\s+/g, "-");
+  const mainPageUrl = `/corretor/${formattedName}`;
+  const imoveisUrl = `/corretor/${formattedName}/imoveis`;
+
   // Use default logo if no logo provided or on error
   const finalLogoUrl =
     imgError || !logoUrl ? "/assets/logo_larhub_semfundo.png" : logoUrl;
@@ -40,28 +50,44 @@ const HeaderCorretor = ({ logoUrl, nomeCorretor, contato }) => {
       <div className="mx-auto w-[95%] lg:w-[85%] xl:w-3/4">
         <nav className="flex items-center justify-between py-4">
           {/* Logo with fallback */}
-          <Link href="/" className="relative z-10">
-            <Image
-              src={finalLogoUrl}
-              alt="Logo"
-              width={120}
-              height={40}
-              className={`h-10 w-auto transition-opacity duration-300 ${
-                scrolled ? "opacity-100" : "opacity-90 hover:opacity-100"
-              }`}
-              priority
-              unoptimized
-              onError={() => {
-                console.log("Logo load error, using default logo");
-                setImgError(true);
-              }}
-            />
+          <Link href={mainPageUrl}>
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              <Image
+                src={finalLogoUrl}
+                alt="Logo"
+                width={120}
+                height={40}
+                className={`h-10 w-auto transition-opacity duration-300 ${
+                  scrolled ? "opacity-100" : "opacity-90 hover:opacity-100"
+                }`}
+                priority
+                unoptimized
+                onError={() => {
+                  console.log("Logo load error, using default logo");
+                  setImgError(true);
+                }}
+              />
+            </motion.div>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-8">
             <Link
-              href="#imoveis"
+              href={mainPageUrl}
+              className={`text-base font-medium transition-colors duration-300 ${
+                scrolled
+                  ? "text-gray-700 hover:text-primary-100"
+                  : "text-white hover:text-secondary-100"
+              }`}
+              scroll={true}
+            >
+              Página Principal
+            </Link>
+            <Link
+              href={imoveisUrl}
               className={`text-base font-medium transition-colors duration-300 ${
                 scrolled
                   ? "text-gray-700 hover:text-primary-100"
@@ -123,7 +149,14 @@ const HeaderCorretor = ({ logoUrl, nomeCorretor, contato }) => {
             >
               <div className="flex flex-col p-6 space-y-4">
                 <Link
-                  href="#imoveis"
+                  href={mainPageUrl}
+                  className="text-gray-700 hover:text-primary-100 font-medium"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Página Principal
+                </Link>
+                <Link
+                  href={imoveisUrl}
                   className="text-gray-700 hover:text-primary-100 font-medium"
                   onClick={() => setIsOpen(false)}
                   scroll={true}

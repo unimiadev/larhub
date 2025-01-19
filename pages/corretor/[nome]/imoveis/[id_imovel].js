@@ -25,8 +25,28 @@ const ImovelInfoPage = ({
   logo,
   imoveisSemelhantes,
 }) => {
-  if (!imovelSelecionado) {
-    return null;
+  const formattedName = nomeCorretor?.toLowerCase().replace(/\s+/g, "-");
+  const imoveisUrl = `/corretor/${formattedName}/imoveis`;
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading time for smooth transition
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (isLoading || !imovelSelecionado) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-secondary-100 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Carregando...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -37,13 +57,18 @@ const ImovelInfoPage = ({
             ? `${imovelSelecionado.detalhes["nome_imovel"]} - ${corretor.name}`
             : "Imóvel"}
         </title>
-        <MetaTagsImovel imovel={imovelSelecionado} corretor={corretor} />
+        <MetaTagsImovel
+          imovel={imovelSelecionado}
+          corretor={corretor}
+          logo={logo}
+        />
       </Head>
 
       <HeaderCorretor
-        logoUrl={corretor.landing.appBar.logo}
-        nomeCorretor={nomeCorretor}
+        logoUrl={logo}
+        nomeCorretor={corretor.name}
         contato={corretor.contato}
+        imoveisUrl={imoveisUrl}
       />
 
       {/* Main Content */}
@@ -161,7 +186,7 @@ const ImovelInfoPage = ({
       </main>
 
       <FooterLandCorretor
-        logoUrl={corretor.landing.appBar.logo}
+        logoUrl={logo}
         nomeCorretor={corretor.name}
         contato={corretor.contato}
         redesSociais={corretor.contato?.redes_sociais}
