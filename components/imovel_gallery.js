@@ -81,21 +81,20 @@ const ImovelImageGallery = ({ imagens }) => {
                 </div>
               </div>
             ) : (
-              <div className="group relative h-full">
+              <div
+                className="group relative h-full cursor-pointer"
+                onClick={() => setShowLightbox(true)}
+              >
                 <Image
                   src={imagens[0]}
                   alt="Imagem principal"
                   fill
                   className="object-cover"
-                  onClick={() => setShowLightbox(true)}
                   onError={() => handleImageError(0)}
                   priority
                 />
                 <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <button
-                    onClick={() => setShowLightbox(true)}
-                    className="bg-white/90 hover:bg-white text-gray-800 px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-300"
-                  >
+                  <button className="bg-white/90 hover:bg-white text-gray-800 px-4 py-2 rounded-full flex items-center gap-2 transition-all duration-300">
                     <FaExpand className="text-sm" />
                     <span className="text-sm sm:text-base">
                       Ver todas as fotos ({imagens.length})
@@ -106,7 +105,7 @@ const ImovelImageGallery = ({ imagens }) => {
             )}
           </div>
 
-          {/* Side Thumbnails - Now visible on mobile */}
+          {/* Side Thumbnails */}
           <div className="grid grid-cols-2 md:grid-cols-1 md:grid-rows-2 gap-4 relative">
             {imagens.slice(1, 3).map((imagem, index) => (
               <div
@@ -162,18 +161,9 @@ const ImovelImageGallery = ({ imagens }) => {
             onClick={() => setShowLightbox(false)}
           >
             <div className="relative w-full h-full flex items-center justify-center p-4 sm:p-8">
-              {/* Close button */}
+              {/* Navigation buttons - Adjusted for better mobile visibility */}
               <motion.button
-                className="absolute top-4 right-4 text-secondary-100 p-2 rounded-full hover:bg-white/10 transition-colors z-10"
-                onClick={() => setShowLightbox(false)}
-                whileHover={{ scale: 1.1 }}
-              >
-                <FaTimes size={24} />
-              </motion.button>
-
-              {/* Navigation buttons */}
-              <motion.button
-                className="absolute left-2 sm:left-8 text-secondary-100 p-2 sm:p-4 rounded-full hover:bg-white/10 transition-colors"
+                className="absolute left-2 sm:left-8 text-secondary-100 p-2 sm:p-4 rounded-full hover:bg-white/10 transition-colors z-20 bg-black/30"
                 onClick={(e) => {
                   e.stopPropagation();
                   previousImage();
@@ -181,6 +171,15 @@ const ImovelImageGallery = ({ imagens }) => {
                 whileHover={{ scale: 1.1 }}
               >
                 <FaArrowLeft size={20} className="sm:text-2xl" />
+              </motion.button>
+
+              {/* Close button */}
+              <motion.button
+                className="absolute top-4 right-4 text-secondary-100 p-2 rounded-full hover:bg-white/10 transition-colors z-10"
+                onClick={() => setShowLightbox(false)}
+                whileHover={{ scale: 1.1 }}
+              >
+                <FaTimes size={24} />
               </motion.button>
 
               {/* Image container */}
